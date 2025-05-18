@@ -18,6 +18,7 @@ module.exports = router;
 
 // Schema validation functions
 function createSchema(req, res, next) {
+    console.log('Validating request schema:', req.body);
     const schema = Joi.object({
         type: Joi.string().required(),
         description: Joi.string().allow(null, ''),
@@ -55,15 +56,22 @@ function updateSchema(req, res, next) {
 
 // Route handler functions
 function create(req, res, next) {
-    console.log('Creating request with data:', req.body);
+    console.log('=== Request Creation Started ===');
+    console.log('Request body:', JSON.stringify(req.body, null, 2));
+    console.log('User:', JSON.stringify(req.user, null, 2));
+    
     requestService.create(req.body, req.user.id)
         .then(request => {
-            console.log('Request created successfully:', request);
+            console.log('Request created successfully:', JSON.stringify(request, null, 2));
             res.status(201).json(request);
         })
         .catch(error => {
             console.error('Error creating request:', error);
-            next(error);
+            // Send more detailed error response
+            res.status(400).json({
+                message: error.message || 'Failed to create request',
+                error: process.env.NODE_ENV === 'development' ? error : undefined
+            });
         });
 }
 

@@ -57,7 +57,6 @@
                                 <button class="btn btn-sm btn-info" (click)="viewWorkflows(employee.id)">Workflows</button>
                                 <button class="btn btn-sm btn-warning" (click)="transfer(employee)">Transfer</button>
                                 <button class="btn btn-sm btn-primary" (click)="edit(employee.id)">Edit</button>
-                                <button *ngIf="account()?.role === 'Admin'" class="btn btn-sm btn-danger" (click)="delete(employee.id)">Delete</button>
                             </div>
                         </td>
                     </tr>

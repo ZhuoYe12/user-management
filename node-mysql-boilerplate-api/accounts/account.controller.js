@@ -53,6 +53,11 @@ function refreshToken(req, res, next) {
   if (!token) {
       return res.status(400).json({ message: 'Refresh token is required' });
   }
+
+  // Validate IP address format
+  if (!ipAddress || !/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(ipAddress)) {
+      return res.status(400).json({ message: 'Invalid IP address' });
+  }
   
   accountService.refreshToken({ token, ipAddress })
     .then(({ refreshToken, ...account }) => {
@@ -263,7 +268,10 @@ function setTokenCookie(res, token) {
   // create cookie with refresh token that expires in 7 days
   const cookieOptions = {
       httpOnly: true,
-      expires: new Date(Date.now() + 7*24*60*60*1000)
+      secure: process.env.NODE_ENV === 'production', // Only send cookie over HTTPS in production
+      sameSite: 'strict', // Protect against CSRF
+      expires: new Date(Date.now() + 7*24*60*60*1000),
+      path: '/' // Ensure cookie is available for all paths
   };
   res.cookie('refreshToken', token, cookieOptions);
 }

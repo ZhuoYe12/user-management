@@ -182,29 +182,9 @@ export class ListComponent implements OnInit {
   }
 
   edit(id: number) {
-    this.router.navigate(['/admin/requests/edit', id]);
+    this.router.navigate(['../edit', id], { relativeTo: this.route });
   }
 
-  delete(id: number) {
-    const request = this.requests.find(r => r.id === id);
-    if (!request) return;
-    
-    if (confirm('Are you sure you want to delete this request?')) {
-      this.requestService.delete(id.toString())
-        .pipe(first())
-        .subscribe({
-          next: () => {
-            this.alertService.success('Request deleted successfully');
-            this.requests = this.requests.filter(r => r.id !== id);
-          },
-          error: (error) => {
-            this.alertService.error('Error deleting request');
-            console.error('Error deleting request:', error);
-          }
-        });
-    }
-  }
-  
   retry() {
     this.error = '';
     this.retryAttempts++;
