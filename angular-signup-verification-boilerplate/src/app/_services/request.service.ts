@@ -178,20 +178,45 @@ export class RequestService {
     update(id: string, params: any): Observable<Request> {
         console.log(`Updating request ${id} with:`, params);
         
+        // Ensure employeeId is a number
+        if (params.employeeId) {
+            params.employeeId = Number(params.employeeId);
+        }
+        
+        // Ensure quantities are numbers
+        if (params.requestItems) {
+            params.requestItems = params.requestItems.map(item => ({
+                ...item,
+                quantity: Number(item.quantity)
+            }));
+        }
+        
         return this.http.put<Request>(`${baseUrl}/${id}`, params).pipe(
             tap(updatedRequest => {
-                console.log('Successfully updated request:', updatedRequest);
+                console.log('Raw response from server:', updatedRequest);
                 
-                // Update cache with the server response
+                // Normalize the response data
                 if (updatedRequest) {
+                    // Handle both RequestItems and requestItems
+                    if (updatedRequest['RequestItems'] && !updatedRequest.requestItems) {
+                        updatedRequest.requestItems = updatedRequest['RequestItems'];
+                    } else if (!updatedRequest.requestItems) {
+                        updatedRequest.requestItems = [];
+                    }
+                    
+                    // Update cache
                     this.requestByIdCache.set(id, updatedRequest);
                     // Clear the full requests cache to force a refresh
                     this.requestsCache = [];
+                    
+                    console.log('Normalized and cached updated request:', updatedRequest);
                 }
             }),
             catchError(error => {
                 console.error(`Error updating request ${id}:`, error);
-                return throwError(() => this.extractErrorMessage(error));
+                const errorMessage = this.extractErrorMessage(error);
+                console.error('Extracted error message:', errorMessage);
+                return throwError(() => errorMessage);
             })
         );
     }

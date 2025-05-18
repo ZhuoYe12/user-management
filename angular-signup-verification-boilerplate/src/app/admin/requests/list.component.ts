@@ -182,7 +182,7 @@ export class ListComponent implements OnInit {
   }
 
   edit(id: number) {
-    this.router.navigate(['../edit', id], { relativeTo: this.route });
+    this.router.navigate(['/admin/requests/edit', id]);
   }
 
   retry() {

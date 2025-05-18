@@ -49,7 +49,6 @@
                         <div class="row g-2">
                             <div class="col-md-6">
                                 <label class="form-label d-block">Name <span class="text-danger">*</span></label>
-                                <!-- Use the [ngModel] binding to ensure two-way data binding works -->
                                 <input type="text" class="form-control w-100" 
                                        [(ngModel)]="item.name" 
                                        [ngModelOptions]="{standalone: true}"
@@ -57,7 +56,6 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label d-block">Quantity <span class="text-danger">*</span></label>
-                                <!-- Use the [ngModel] binding to ensure two-way data binding works -->
                                 <input type="number" class="form-control w-100" 
                                        [(ngModel)]="item.quantity" 
                                        [ngModelOptions]="{standalone: true}"
