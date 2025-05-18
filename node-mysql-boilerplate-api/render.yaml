@@ -4,8 +4,8 @@ services:
     env: node
     region: oregon
     plan: free
-    buildCommand: cd node-mysql-boilerplate-api && npm install
-    startCommand: cd node-mysql-boilerplate-api && npm start
+    buildCommand: npm install
+    startCommand: npm start
     healthCheckPath: /health
     autoDeploy: true
     envVars:
