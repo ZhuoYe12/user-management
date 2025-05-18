@@ -1,7 +1,15 @@
 const { Sequelize } = require('sequelize');
 const config = require('../config.json');
 
-const sequelize = new Sequelize(process.env.DATABASE_URL || config.connectionString, {
+// Log the database URL (without password for security)
+const dbUrl = process.env.DATABASE_URL || config.connectionString;
+console.log('Database URL:', dbUrl ? dbUrl.replace(/:[^:@]+@/, ':****@') : 'undefined');
+
+if (!dbUrl) {
+    throw new Error('DATABASE_URL environment variable is not set');
+}
+
+const sequelize = new Sequelize(dbUrl, {
     dialect: 'postgres',
     dialectOptions: {
         ssl: {
@@ -9,7 +17,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL || config.connectionStr
             rejectUnauthorized: false
         }
     },
-    logging: false
+    logging: console.log // Enable logging temporarily for debugging
 });
 
 const db = {};
