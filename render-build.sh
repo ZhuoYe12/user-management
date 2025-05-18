@@ -25,4 +25,4 @@ ls -la ./node_modules/.bin/ || echo "./node_modules/.bin/ not found or empty"
 
 # Run build with explicit path to ng and base-href
 # This uses the path relative to the current directory (angular-signup-verification-boilerplate)
-./node_modules/.bin/ng build angular-signup-verification-boilerplate --configuration production --base-href / 
+./node_modules/.bin/ng build angular-signup-verification-boilerplate --configuration production --base-href / --aot --optimization=true --vendor-chunk=true --build-optimizer=true 
