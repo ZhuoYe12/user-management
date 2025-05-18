@@ -11,6 +11,9 @@ app.use(cors({
     credentials: true
 }));
 
+// Enable trust proxy for express-rate-limit when running behind a proxy (like Render or Railway)
+app.set('trust proxy', true);
+
 // Health check endpoint for Render
 app.get('/health', async (req, res) => {
     try {
